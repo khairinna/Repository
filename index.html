@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			div{
+				border: 2px solid black;
+				padding: 10px;
+				
+				width: 500px;
+				height: 500px;
+			}
+		</style>
+		<script src="cordova.js"></script>
+		<script>
+			function initCamera(){
+				var options = {
+					quality:80,
+					destinationType:DATA_URL, 	
+					allowEdit: true,
+					encodingType: JPEG,
+					PictureSourceType: CAMERA
+				}
+				navigator.camera.getPicture(onSuccess,onFail,options);
+			}
+			function initLibrary(){
+				var options = {
+					quality:80,
+					destinationType:DATA_URL, 	
+					allowEdit: true,
+					encodingType: JPEG,
+					PictureSourceType: SAVEDPHOTOALBUM
+				}
+				navigator.camera.getPicture(onSuccess,onFail,options);
+			}
+			function onSuccess(imageURL){
+				document.getElementById("pic").src = "data:image/jpeg; base64" + imageURL;
+			}
+			function onFail(){
+				navigator.notification.alert("No camera on the device","The Registeration App");
+			}
+			function registerUser(){
+				var inputName = document.getElementById("name");
+				var inputEmail = document.getElementById("email");
+				
+				inputName.onkeyup = function(){
+					var regex = /^\w+([\.\-]w+)*\@\w+([\.\-]\w+)*\.[a-zA-Z]{2,11}$/;
+					
+					if(inputName.value != ""){
+						if(!regex.test(inputName.value)){
+							navigator.notification.alert("Please insert valid email address","The Registeration App");
+						}
+					}
+				}
+				navigator.notification.alert("Registeration completed","The Registeration App");
+			}
+			function cancelUser(){
+				document.getElementById("name").innerHTML = "";
+				document.getElementById("email").innerHTML = "";
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div><center>
+			<h2>Registeration</h2>
+			<br />
+			<img src="" id="pic" height="200" />
+			<br />
+			<input type="button" value="Take Picture" onclick="initCamera()" />
+			<input type="button" value="Browse.." onclick="initLibrary()" />
+			<hr /><br />
+			Name: <input type="text" id="name" placeholder="Enter your name" required/>
+			<br />
+			Email: <input type="text" id="email" placeholder="Enter your email" required/>
+			<br /><br /><br />
+			<input type="button" id="btnRegister" value="Register" onclick="registerUser()" />
+			<input type="button" id="btnCancel" value="Cancel" onclick="cancelUser()" />
+		</center></div>
+	</body>
+</html>
